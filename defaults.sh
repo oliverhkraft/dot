@@ -27,13 +27,6 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 
-# ---------- iTerm2: load preferences from a folder ----------
-# Store iTerm2 prefs inside your dotfiles repo via stow.
-ITERM_PREFS_DIR="$HOME/.iterm2"
-mkdir -p "$ITERM_PREFS_DIR"
-defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$ITERM_PREFS_DIR"
-defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-
 # Apply immediately (ignore errors if processes not running)
 killall Dock >/dev/null 2>&1 || true
 killall Finder >/dev/null 2>&1 || true

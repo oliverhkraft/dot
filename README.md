@@ -119,7 +119,8 @@ stow git ssh zsh vscode iterm2
 
 ## iTerm2 Preferences
 
-This repo sets iTerm2 to load prefs from `~/.iterm2`.
+This repo manages iTerm2 prefs in `~/.iterm2` and only enables “Load prefs from folder”
+when the plist is valid (to avoid the “missing or malformed file” error).
 
 Note: if iTerm2 is running, `make apply` will restart it to load prefs.
 Set `ITERM2_RESTART=0` to skip the restart.

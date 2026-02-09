@@ -2,12 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SRC="$ROOT/dotfiles/iterm2/.iterm2"
 DST="$HOME/.iterm2"
-DST_IS_SYMLINK=0
-if [ -L "$DST" ]; then
-  DST_IS_SYMLINK=1
-fi
 
 # If ~/.iterm2 is a file (not a directory), back it up.
 if [ -e "$DST" ] && [ ! -d "$DST" ]; then
@@ -16,79 +11,77 @@ fi
 
 mkdir -p "$DST/DynamicProfiles"
 
-# Helper: write a plist from defaults if possible.
+is_valid_plist() {
+  local target="$1"
+  [ -s "$target" ] && /usr/bin/plutil -lint "$target" >/dev/null 2>&1
+}
+
 write_plist_from_defaults() {
   local target="$1"
-  if /usr/bin/defaults export com.googlecode.iterm2 - >/tmp/iterm2-prefs.plist 2>/dev/null; then
-    mv /tmp/iterm2-prefs.plist "$target"
-    return 0
+  local tmp
+  tmp="$(mktemp)"
+  if /usr/bin/defaults export com.googlecode.iterm2 - >"$tmp" 2>/dev/null; then
+    if /usr/bin/plutil -lint "$tmp" >/dev/null 2>&1; then
+      mv "$tmp" "$target"
+      return 0
+    fi
   fi
+  rm -f "$tmp"
   return 1
 }
 
-copy_if_different() {
-  local src="$1"
-  local dst="$2"
-  if [ "$DST_IS_SYMLINK" -eq 1 ]; then
-    return 0
-  fi
-  if [ ! -f "$src" ]; then
-    return 0
-  fi
-  if [ -f "$dst" ]; then
-    # Same inode (symlinked target) or identical content — skip copy.
-    if [ "$src" -ef "$dst" ] || /usr/bin/cmp -s "$src" "$dst"; then
-      return 0
-    fi
-  fi
-  cp "$src" "$dst" 2>/tmp/iterm2-cp.err || {
-    if /usr/bin/grep -q "are identical" /tmp/iterm2-cp.err; then
-      return 0
-    fi
-    echo "copy failed: $(cat /tmp/iterm2-cp.err)" >&2
-    return 0
-  }
+write_minimal_plist() {
+  local target="$1"
+  cat <<'PLIST' > "$target"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+</dict>
+</plist>
+PLIST
 }
 
-# Prefer repo defaults if present.
-copy_if_different "$SRC/com.googlecode.iterm2.plist" "$DST/com.googlecode.iterm2.plist"
-
-# Ensure plist exists and is valid.
-if [ ! -f "$DST/com.googlecode.iterm2.plist" ]; then
-  if ! write_plist_from_defaults "$DST/com.googlecode.iterm2.plist"; then
-    cat <<'PLIST' > "$DST/com.googlecode.iterm2.plist"
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-</dict>
-</plist>
-PLIST
+ensure_prefs_plist() {
+  local target="$1"
+  if is_valid_plist "$target"; then
+    return 0
   fi
-else
-  if ! /usr/bin/plutil -lint "$DST/com.googlecode.iterm2.plist" >/dev/null 2>&1; then
-    if ! write_plist_from_defaults "$DST/com.googlecode.iterm2.plist"; then
-      cat <<'PLIST' > "$DST/com.googlecode.iterm2.plist"
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-</dict>
-</plist>
-PLIST
-    fi
+  if write_plist_from_defaults "$target"; then
+    return 0
   fi
-fi
+  # Best-effort: launch iTerm2 once to initialize defaults, then export.
+  /usr/bin/open -a iTerm >/dev/null 2>&1 || /usr/bin/open -a iTerm2 >/dev/null 2>&1 || true
+  sleep 2
+  if write_plist_from_defaults "$target"; then
+    /usr/bin/osascript -e 'tell application "iTerm2" to quit' >/dev/null 2>&1 || true
+    return 0
+  fi
+  /usr/bin/osascript -e 'tell application "iTerm2" to quit' >/dev/null 2>&1 || true
+  write_minimal_plist "$target"
+}
 
-# Ensure DynamicProfiles exists and is valid JSON.
-copy_if_different "$SRC/DynamicProfiles/Profiles.json" "$DST/DynamicProfiles/Profiles.json"
-
-if [ ! -f "$DST/DynamicProfiles/Profiles.json" ]; then
-  cat <<'JSON' > "$DST/DynamicProfiles/Profiles.json"
+ensure_profiles_json() {
+  local target="$1"
+  if [ -f "$target" ]; then
+    return 0
+  fi
+  cat <<'JSON' > "$target"
 {
   "Profiles": []
 }
 JSON
+}
+
+ensure_prefs_plist "$DST/com.googlecode.iterm2.plist"
+ensure_profiles_json "$DST/DynamicProfiles/Profiles.json"
+
+# Enable custom folder only if plist is valid; otherwise disable to avoid errors.
+if is_valid_plist "$DST/com.googlecode.iterm2.plist"; then
+  /usr/bin/defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DST"
+  /usr/bin/defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+else
+  /usr/bin/defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool false
 fi
 
 # Restart iTerm2 to pick up preferences, unless disabled.
