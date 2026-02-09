@@ -28,8 +28,11 @@ copy_if_different() {
   if [ ! -f "$src" ]; then
     return 0
   fi
-  if [ -f "$dst" ] && /usr/bin/cmp -s "$src" "$dst"; then
-    return 0
+  if [ -f "$dst" ]; then
+    # Same inode (symlinked target) or identical content — skip copy.
+    if [ "$src" -ef "$dst" ] || /usr/bin/cmp -s "$src" "$dst"; then
+      return 0
+    fi
   fi
   cp "$src" "$dst"
 }
