@@ -14,20 +14,24 @@ if [ ! -f "$CONF" ]; then
   exit 0
 fi
 
-mapfile -t lines < <(grep -v '^[[:space:]]*#' "$CONF" | sed '/^[[:space:]]*$/d')
-if [ ${#lines[@]} -eq 0 ]; then
-  echo "displayplacer config is empty; skipping"
-  exit 0
-fi
-
 args=()
-for line in "${lines[@]}"; do
+while IFS= read -r line; do
+  # Skip comments/blank lines
+  if [[ "$line" =~ ^[[:space:]]*# ]] || [[ -z "${line//[[:space:]]/}" ]]; then
+    continue
+  fi
   if [[ "$line" == displayplacer* ]]; then
     line="${line#displayplacer }"
   fi
-  read -r -a parts <<<"$line"
-  args+=("${parts[@]}")
-done
+  for part in $line; do
+    args+=("$part")
+  done
+done < "$CONF"
+
+if [ ${#args[@]} -eq 0 ]; then
+  echo "displayplacer config is empty; skipping"
+  exit 0
+fi
 
 if [ ${#args[@]} -eq 0 ]; then
   echo "displayplacer config produced no arguments; skipping"
