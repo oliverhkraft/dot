@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DST="$HOME/.iterm2"
+ENABLE_FLAG="$DST/.enable_custom_prefs"
 
 # If ~/.iterm2 is a file (not a directory), back it up.
 if [ -e "$DST" ] && [ ! -d "$DST" ]; then
@@ -76,8 +77,15 @@ JSON
 ensure_prefs_plist "$DST/com.googlecode.iterm2.plist"
 ensure_profiles_json "$DST/DynamicProfiles/Profiles.json"
 
-# Enable custom folder only if plist is valid; otherwise disable to avoid errors.
-if is_valid_plist "$DST/com.googlecode.iterm2.plist"; then
+# Only enable custom folder if user opted-in and prefs look real.
+# This prevents iTerm2 warnings about malformed/missing files.
+prefs_file="$DST/com.googlecode.iterm2.plist"
+prefs_size=0
+if [ -f "$prefs_file" ]; then
+  prefs_size=$(stat -f%z "$prefs_file" 2>/dev/null || echo 0)
+fi
+
+if [ -f "$ENABLE_FLAG" ] && is_valid_plist "$prefs_file" && [ "$prefs_size" -gt 512 ]; then
   /usr/bin/defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DST"
   /usr/bin/defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 else

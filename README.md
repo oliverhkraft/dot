@@ -120,16 +120,22 @@ stow git ssh zsh vscode iterm2
 ## iTerm2 Preferences
 
 This repo manages iTerm2 prefs in `~/.iterm2` and only enables “Load prefs from folder”
-when the plist is valid (to avoid the “missing or malformed file” error).
+after you opt in, to avoid iTerm2’s “missing or malformed file” error.
 
 Note: if iTerm2 is running, `make apply` will restart it to load prefs.
 Set `ITERM2_RESTART=0` to skip the restart.
 
-To generate real iTerm2 prefs:
+To generate real iTerm2 prefs and enable custom prefs loading:
 1. Run `make apply`
 2. Open iTerm2 → Settings/Preferences → General → “Load preferences from a custom folder”
 3. Point it to `~/.iterm2`
 4. iTerm2 writes files there — copy/commit them to `dotfiles/iterm2/.iterm2`
+5. Opt in to loading from this folder:
+
+```bash
+touch ~/.iterm2/.enable_custom_prefs
+make apply
+```
 
 ## SSH Keys (1Password)
 
