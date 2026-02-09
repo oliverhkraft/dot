@@ -34,7 +34,7 @@ main() {
   ensure_brew_shellenv
 
   log "Installing Brewfile packages (idempotent)"
-  brew bundle --file "$ROOT/Brewfile" --no-lock
+  brew bundle --file "$ROOT/Brewfile"
 
   log "Applying dotfiles via stow (idempotent)"
   command -v stow >/dev/null 2>&1 || brew install stow

@@ -8,7 +8,7 @@ doctor:
 	./doctor.sh
 
 brew:
-	brew bundle --file Brewfile --no-lock
+	brew bundle --file Brewfile
 
 stow:
 	stow git ssh zsh vscode iterm2

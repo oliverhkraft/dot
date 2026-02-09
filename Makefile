@@ -22,7 +22,7 @@ doctor:
 
 .PHONY: brew
 brew:
-	brew bundle --file Brewfile --no-lock
+	brew bundle --file Brewfile
 
 .PHONY: stow
 stow:
