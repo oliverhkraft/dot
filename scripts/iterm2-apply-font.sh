@@ -1,9 +1,54 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FONT_NAME="JetBrainsMono Nerd Font"
-FONT_SIZE="13"
+FONT_NAME="${ITERM_FONT_NAME:-}"
+FONT_SIZE="${ITERM_FONT_SIZE:-13}"
 PLIST="$HOME/Library/Preferences/com.googlecode.iterm2.plist"
+
+detect_font() {
+  # Returns the best matching installed font full name.
+  local installed
+  installed=$(/usr/sbin/system_profiler SPFontsDataType 2>/dev/null | awk -F': ' '/Full Name/ {print $2}')
+
+  # Helper: first match from a regex list
+  pick() {
+    local pattern="$1"
+    local match
+    match=$(echo "$installed" | /usr/bin/grep -m1 -E "$pattern" || true)
+    if [ -n "$match" ]; then
+      echo "$match"
+      return 0
+    fi
+    return 1
+  }
+
+  # Prefer JetBrainsMono Nerd Font variants (Regular/Medium first).
+  pick 'JetBrainsMono.*(Nerd Font|NF).*Regular' && return 0
+  pick 'JetBrainsMono.*(Nerd Font|NF).*Medium' && return 0
+  pick 'JetBrainsMono.*(Nerd Font|NF).*' && return 0
+
+  # Then any Nerd Font with Regular/Medium.
+  pick '.*Nerd Font.*Regular' && return 0
+  pick '.*Nerd Font.*Medium' && return 0
+
+  # Then any Nerd Font / NF.
+  pick '.*Nerd Font.*' && return 0
+  pick '.*\\bNF\\b.*' && return 0
+
+  return 1
+}
+
+if [ -z "$FONT_NAME" ]; then
+  FONT_NAME="$(detect_font || true)"
+fi
+
+if [ -z "$FONT_NAME" ]; then
+  echo "No Nerd Font detected; skipping iTerm2 font setup."
+  exit 0
+fi
+
+export FONT_NAME
+export FONT_SIZE
 
 # Ensure iTerm2 has created its plist.
 if [ ! -f "$PLIST" ]; then

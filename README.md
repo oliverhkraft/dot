@@ -149,10 +149,17 @@ To add/remove plugins, edit that file and restart your shell. The bundle is auto
 
 ## iTerm2 Nerd Font
 
-iTerm2 is configured to use **JetBrainsMono Nerd Font** for all profiles via
-`scripts/iterm2-apply-font.sh`. This happens automatically during `make apply`.
+iTerm2 is configured to use a Nerd Font for all profiles via
+`scripts/iterm2-apply-font.sh`. It auto-detects installed Nerd Fonts and applies the
+first match (JetBrainsMono Nerd Font preferred).
 
 If iTerm2 is already running, it will be restarted (unless `ITERM2_RESTART=0`).
+
+Override the font or size:
+
+```bash
+ITERM_FONT_NAME="JetBrainsMono Nerd Font" ITERM_FONT_SIZE=14 make apply
+```
 
 ## iTerm2 Preferences
 
