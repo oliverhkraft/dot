@@ -1,0 +1,18 @@
+tap "homebrew/cask"
+tap "homebrew/cask-versions"
+
+brew "git"
+brew "stow"
+brew "dockutil"
+brew "mas"
+brew "jq"
+brew "ripgrep"
+brew "fd"
+brew "just"
+
+cask "1password"
+cask "visual-studio-code"
+cask "raycast"
+cask "iterm2"
+cask "herd"
+cask "jump-desktop"

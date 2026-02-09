@@ -1,0 +1,11 @@
+[user]
+	name = Your Name
+	email = you@example.com
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[push]
+	default = simple
+[pull]
+	rebase = false
