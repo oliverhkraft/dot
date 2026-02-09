@@ -11,7 +11,7 @@ brew:
 	brew bundle --file Brewfile
 
 stow:
-	stow git ssh zsh vscode iterm2
+	stow git ssh zsh vscode iterm2 starship
 
 defaults:
 	./defaults.sh

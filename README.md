@@ -66,11 +66,12 @@ make apply
 2. Installs Homebrew (if missing)
 3. Installs Brewfile packages and casks
 4. Applies dotfiles via Stow
-5. Ensures iTerm2 prefs folder is valid
-6. Applies macOS defaults
-7. Sets Dock layout
-8. Sets display configuration (optional)
-9. Sets wallpaper (optional)
+5. Applies macOS defaults
+6. Disables iTerm2 custom prefs loading (prevents warnings)
+7. Sets iTerm2 font (Nerd Font)
+8. Sets Dock layout
+9. Sets display configuration (optional)
+10. Sets wallpaper (optional)
 
 You can re-run `make apply` at any time. It is safe and will re-apply the repo’s state.
 
@@ -107,15 +108,14 @@ dotfiles/
 ├── zsh/.zprofile
 ├── zsh/.zshrc
 ├── vscode/Library/Application Support/Code/User/settings.json
-└── iterm2/.iterm2/
-    ├── com.googlecode.iterm2.plist
-    └── DynamicProfiles/Profiles.json
+├── iterm2/Library/Application Support/iTerm2/DynamicProfiles/Profiles.json
+└── starship/.config/starship.toml
 ```
 
 Stow command used:
 
 ```bash
-stow git ssh zsh vscode iterm2
+stow git ssh zsh vscode iterm2 starship
 ```
 
 
@@ -149,29 +149,19 @@ To add/remove plugins, edit that file and restart your shell. The bundle is auto
 
 ## iTerm2 Nerd Font
 
-iTerm2 gets a dynamic profile with JetBrainsMono Nerd Font and is set as the default profile.
+iTerm2 is configured to use **JetBrainsMono Nerd Font** for all profiles via
+`scripts/iterm2-apply-font.sh`. This happens automatically during `make apply`.
 
-If iTerm2 is already running, restart it after `make apply`.
+If iTerm2 is already running, it will be restarted (unless `ITERM2_RESTART=0`).
 
 ## iTerm2 Preferences
 
-This repo manages iTerm2 prefs in `~/.iterm2` and only enables “Load prefs from folder”
-after you opt in, to avoid iTerm2’s “missing or malformed file” error.
+iTerm2 custom prefs loading is disabled by default to avoid “missing or malformed file”
+warnings. The font is applied directly to iTerm2’s standard preferences, so it works
+out of the box.
 
 Note: if iTerm2 is running, `make apply` will restart it to load prefs.
 Set `ITERM2_RESTART=0` to skip the restart.
-
-To generate real iTerm2 prefs and enable custom prefs loading:
-1. Run `make apply`
-2. Open iTerm2 → Settings/Preferences → General → “Load preferences from a custom folder”
-3. Point it to `~/.iterm2`
-4. iTerm2 writes files there — copy/commit them to `dotfiles/iterm2/.iterm2`
-5. Opt in to loading from this folder:
-
-```bash
-touch ~/.iterm2/.enable_custom_prefs
-make apply
-```
 
 ## SSH Keys (1Password)
 
@@ -244,7 +234,7 @@ Disable it:
 - **1Password agent not detected**: Enable it in 1Password Developer settings, then re-run `make doctor`.
 - **Dock not updating**: `dockutil` must be installed (in Brewfile). Re-run `make dock`.
 - **Display not updating**: `displayplacer` must be installed (in Brewfile). Re-run `make display`.
-- **iTerm2 prefs not loading**: Ensure defaults are applied and iTerm2 is pointed to `~/.iterm2`.
+- **iTerm2 warning about prefs**: Custom prefs are disabled by default; re-run `make apply`.
 
 ## Suggested Workflow for Updates
 
