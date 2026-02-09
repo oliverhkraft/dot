@@ -27,3 +27,6 @@ snapshot name="snapshot":
 
 display:
 	./display.sh
+
+fonts:
+	./fonts.sh

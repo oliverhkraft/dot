@@ -10,6 +10,7 @@ help:
 	@echo " make defaults       Apply macOS defaults"
 	@echo " make dock           Apply Dock layout"
 	@echo " make display        Apply display configuration"
+	@echo " make fonts          Open Font Book (optional)"
 	@echo " make sync-defaults  Export current UI defaults and show git diff"
 	@echo " make snapshot NAME=before  Take a defaults snapshot"
 
@@ -48,3 +49,7 @@ snapshot:
 .PHONY: display
 display:
 	./display.sh
+
+.PHONY: fonts
+fonts:
+	./fonts.sh

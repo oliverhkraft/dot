@@ -83,6 +83,7 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 - `make defaults` – Apply macOS defaults only
 - `make dock` – Apply Dock layout only
 - `make display` – Apply display configuration
+- `make fonts` – Open Font Book (optional)
 - `make sync-defaults` – Export current UI defaults into `defaults-export/`
 - `make snapshot NAME=before` – Snapshot defaults for diffing
 
@@ -118,6 +119,15 @@ stow git ssh zsh vscode iterm2
 ```
 
 
+
+
+## Nerd Font (Icons)
+
+This repo installs JetBrainsMono Nerd Font via Homebrew cask so icons render correctly in Starship.
+
+After `make apply`, set your terminal font to **JetBrainsMono Nerd Font**.
+
+Optional: run `make fonts` to open Font Book and verify the font is installed.
 
 ## Prompt (Starship)
 
