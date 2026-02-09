@@ -40,6 +40,9 @@ main() {
   command -v stow >/dev/null 2>&1 || brew install stow
   stow git ssh zsh vscode iterm2
 
+  log "Ensuring iTerm2 prefs folder is valid"
+  bash "$ROOT/scripts/ensure-iterm2-prefs.sh"
+
   log "Applying macOS defaults (idempotent)"
   bash "$ROOT/defaults.sh"
 

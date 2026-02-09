@@ -66,10 +66,11 @@ make apply
 2. Installs Homebrew (if missing)
 3. Installs Brewfile packages and casks
 4. Applies dotfiles via Stow
-5. Applies macOS defaults
-6. Sets Dock layout
-7. Sets display configuration (optional)
-8. Sets wallpaper (optional)
+5. Ensures iTerm2 prefs folder is valid
+6. Applies macOS defaults
+7. Sets Dock layout
+8. Sets display configuration (optional)
+9. Sets wallpaper (optional)
 
 You can re-run `make apply` at any time. It is safe and will re-apply the repo’s state.
 
