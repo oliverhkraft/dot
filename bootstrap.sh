@@ -46,6 +46,9 @@ main() {
   log "Applying Dock layout (idempotent)"
   bash "$ROOT/dock.sh"
 
+  log "Applying display configuration (optional)"
+  bash "$ROOT/display.sh" || true
+
   log "Applying wallpaper (optional)"
   bash "$ROOT/wallpaper.sh" || true
 

@@ -3,7 +3,7 @@
 A minimal, repeatable macOS bootstrap repo (Apple Silicon) using:
 - Homebrew + Brewfile for apps/tools
 - GNU Stow for dotfiles
-- `defaults` + `dockutil` for macOS UI settings
+- `defaults` + `dockutil`, `displayplacer` for macOS UI settings
 - 1Password SSH agent (no private keys in repo)
 
 This is intentionally simple and idempotent. Re-running the bootstrap applies the repo’s state.
@@ -68,7 +68,8 @@ make apply
 4. Applies dotfiles via Stow
 5. Applies macOS defaults
 6. Sets Dock layout
-7. Sets wallpaper (optional)
+7. Sets display configuration (optional)
+8. Sets wallpaper (optional)
 
 You can re-run `make apply` at any time. It is safe and will re-apply the repo’s state.
 
@@ -80,6 +81,7 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 - `make stow` – Apply dotfiles only
 - `make defaults` – Apply macOS defaults only
 - `make dock` – Apply Dock layout only
+- `make display` – Apply display configuration
 - `make sync-defaults` – Export current UI defaults into `defaults-export/`
 - `make snapshot NAME=before` – Snapshot defaults for diffing
 
@@ -88,7 +90,7 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 ## Apps Installed
 
 From `Brewfile`:
-- CLI: `git`, `stow`, `dockutil`, `jq`, `ripgrep`, `fd`, `mas`, `just`
+- CLI: `git`, `stow`, `dockutil`, `displayplacer`, `jq`, `ripgrep`, `fd`, `mas`, `just`
 - Casks: `1password`, `visual-studio-code`, `raycast`, `iterm2`, `herd`, `jump-desktop`
 
 Edit `Brewfile` to add/remove apps. Re-run `make brew` or `make apply`.
@@ -153,6 +155,23 @@ This writes plist exports into `defaults-export/` for review.
 
 Dock is reset every run via `dock.sh`. If you want a custom order, edit `dock.sh`.
 
+## Display Resolution
+
+This repo supports enforcing display resolution via `displayplacer`.
+
+Steps:
+1. Run `displayplacer list`
+2. Paste a line into `displayplacer.conf`
+3. Re-run `make apply` or `make display`
+
+Example `displayplacer.conf` line:
+
+```
+id:YOUR_DISPLAY_ID res:2560x1440 hz:60 scaling:on origin:(0,0) degree:0
+```
+
+If `displayplacer.conf` is missing or empty, display configuration is skipped.
+
 ## Wallpaper
 
 By default, `wallpaper.sh` tries to set:
@@ -177,6 +196,7 @@ Disable it:
 - **Homebrew install fails**: Run `xcode-select --install` then re-run `make apply`.
 - **1Password agent not detected**: Enable it in 1Password Developer settings, then re-run `make doctor`.
 - **Dock not updating**: `dockutil` must be installed (in Brewfile). Re-run `make dock`.
+- **Display not updating**: `displayplacer` must be installed (in Brewfile). Re-run `make display`.
 - **iTerm2 prefs not loading**: Ensure defaults are applied and iTerm2 is pointed to `~/.iterm2`.
 
 ## Suggested Workflow for Updates

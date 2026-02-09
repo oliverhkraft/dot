@@ -9,6 +9,7 @@ help:
 	@echo " make stow           Apply dotfiles via stow"
 	@echo " make defaults       Apply macOS defaults"
 	@echo " make dock           Apply Dock layout"
+	@echo " make display        Apply display configuration"
 	@echo " make sync-defaults  Export current UI defaults and show git diff"
 	@echo " make snapshot NAME=before  Take a defaults snapshot"
 
@@ -43,3 +44,7 @@ sync-defaults:
 .PHONY: snapshot
 snapshot:
 	./scripts/defaults-snapshot.sh $(NAME)
+
+.PHONY: display
+display:
+	./display.sh

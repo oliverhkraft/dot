@@ -1,6 +1,7 @@
 brew "git"
 brew "stow"
 brew "dockutil"
+brew "displayplacer"
 brew "mas"
 brew "jq"
 brew "ripgrep"

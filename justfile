@@ -24,3 +24,6 @@ sync-defaults:
 
 snapshot name="snapshot":
 	./scripts/defaults-snapshot.sh {{name}}
+
+display:
+	./display.sh
