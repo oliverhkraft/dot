@@ -121,6 +121,9 @@ stow git ssh zsh vscode iterm2
 
 This repo sets iTerm2 to load prefs from `~/.iterm2`.
 
+Note: if iTerm2 is running, `make apply` will restart it to load prefs.
+Set `ITERM2_RESTART=0` to skip the restart.
+
 To generate real iTerm2 prefs:
 1. Run `make apply`
 2. Open iTerm2 → Settings/Preferences → General → “Load preferences from a custom folder”
