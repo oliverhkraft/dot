@@ -111,7 +111,8 @@ if not isinstance(bookmarks, list) or len(bookmarks) == 0:
 for bm in bookmarks:
     bm["Normal Font"] = font_value
     bm["Non Ascii Font"] = font_value
-    bm["Use Non-ASCII Font"] = True
+    # Force non-ASCII to use the same font; avoids fallback to Menlo.
+    bm["Use Non-ASCII Font"] = False
 
 with open(path, "wb") as f:
     plistlib.dump(data, f)
