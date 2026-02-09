@@ -4,6 +4,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SRC="$ROOT/dotfiles/iterm2/.iterm2"
 DST="$HOME/.iterm2"
+DST_IS_SYMLINK=0
+if [ -L "$DST" ]; then
+  DST_IS_SYMLINK=1
+fi
 
 # If ~/.iterm2 is a file (not a directory), back it up.
 if [ -e "$DST" ] && [ ! -d "$DST" ]; then
@@ -25,6 +29,9 @@ write_plist_from_defaults() {
 copy_if_different() {
   local src="$1"
   local dst="$2"
+  if [ "$DST_IS_SYMLINK" -eq 1 ]; then
+    return 0
+  fi
   if [ ! -f "$src" ]; then
     return 0
   fi
@@ -34,7 +41,13 @@ copy_if_different() {
       return 0
     fi
   fi
-  cp "$src" "$dst"
+  cp "$src" "$dst" 2>/tmp/iterm2-cp.err || {
+    if /usr/bin/grep -q "are identical" /tmp/iterm2-cp.err; then
+      return 0
+    fi
+    echo "copy failed: $(cat /tmp/iterm2-cp.err)" >&2
+    return 0
+  }
 }
 
 # Prefer repo defaults if present.
