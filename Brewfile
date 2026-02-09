@@ -1,6 +1,3 @@
-tap "homebrew/cask"
-tap "homebrew/cask-versions"
-
 brew "git"
 brew "stow"
 brew "dockutil"
