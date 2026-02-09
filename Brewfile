@@ -7,6 +7,8 @@ brew "jq"
 brew "ripgrep"
 brew "fd"
 brew "just"
+brew "antidote"
+brew "starship"
 
 cask "1password"
 cask "visual-studio-code"

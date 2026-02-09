@@ -1,0 +1,68 @@
+# Starship prompt configuration
+# https://starship.rs/config/
+
+format = """$directory$git_branch$git_status$git_state$git_metrics\
+$python$nodejs$rust$golang$php$docker_context$kubernetes\
+$cmd_duration$line_break$character"""
+
+add_newline = true
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold yellow)"
+
+[directory]
+style = "bold blue"
+truncate_to_repo = true
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold purple"
+symbol = " "
+
+[git_status]
+style = "bold yellow"
+format = "([$all_status$ahead_behind]($style) )"
+
+[cmd_duration]
+min_time = 500
+format = "took [$duration]($style) "
+style = "bold yellow"
+
+[python]
+symbol = " "
+format = "[$symbol$version]($style) "
+style = "yellow"
+
+[nodejs]
+symbol = " "
+format = "[$symbol$version]($style) "
+style = "green"
+
+[php]
+symbol = "🐘 "
+format = "[$symbol$version]($style) "
+style = "blue"
+
+[golang]
+symbol = " "
+format = "[$symbol$version]($style) "
+style = "cyan"
+
+[rust]
+symbol = "🦀 "
+format = "[$symbol$version]($style) "
+style = "red"
+
+[docker_context]
+symbol = "🐳 "
+format = "[$symbol$context]($style) "
+style = "blue"
+
+[kubernetes]
+disabled = false
+symbol = "☸ "
+format = "[$symbol$context]($style) "
+style = "cyan"

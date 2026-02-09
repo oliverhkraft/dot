@@ -117,6 +117,25 @@ Stow command used:
 stow git ssh zsh vscode iterm2
 ```
 
+
+
+## Prompt (Starship)
+
+This repo uses Starship for the shell prompt. Config lives at:
+
+- `~/.config/starship.toml` (symlinked from `dotfiles/starship/.config/starship.toml`)
+
+To tweak the prompt, edit that file and open a new shell.
+
+## Zsh Plugins (Antidote)
+
+Zsh plugins are managed by Antidote and loaded automatically from:
+
+- `~/.zsh_plugins.txt` (symlinked from `dotfiles/zsh/.zsh_plugins.txt`)
+
+To add/remove plugins, edit that file and restart your shell. The bundle is auto-generated at
+`~/.zsh_plugins.zsh` when the list changes.
+
 ## iTerm2 Preferences
 
 This repo manages iTerm2 prefs in `~/.iterm2` and only enables “Load prefs from folder”

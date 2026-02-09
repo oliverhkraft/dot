@@ -1,0 +1,7 @@
+# Antidote plugin list
+# One repo per line. Order matters: syntax highlighting should be last.
+
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-completions
+zsh-users/zsh-syntax-highlighting
