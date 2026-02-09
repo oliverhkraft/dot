@@ -22,10 +22,20 @@ write_plist_from_defaults() {
   return 1
 }
 
+copy_if_different() {
+  local src="$1"
+  local dst="$2"
+  if [ ! -f "$src" ]; then
+    return 0
+  fi
+  if [ -f "$dst" ] && /usr/bin/cmp -s "$src" "$dst"; then
+    return 0
+  fi
+  cp "$src" "$dst"
+}
+
 # Prefer repo defaults if present.
-if [ -f "$SRC/com.googlecode.iterm2.plist" ]; then
-  cp "$SRC/com.googlecode.iterm2.plist" "$DST/com.googlecode.iterm2.plist"
-fi
+copy_if_different "$SRC/com.googlecode.iterm2.plist" "$DST/com.googlecode.iterm2.plist"
 
 # Ensure plist exists and is valid.
 if [ ! -f "$DST/com.googlecode.iterm2.plist" ]; then
@@ -55,9 +65,7 @@ PLIST
 fi
 
 # Ensure DynamicProfiles exists and is valid JSON.
-if [ -f "$SRC/DynamicProfiles/Profiles.json" ]; then
-  cp "$SRC/DynamicProfiles/Profiles.json" "$DST/DynamicProfiles/Profiles.json"
-fi
+copy_if_different "$SRC/DynamicProfiles/Profiles.json" "$DST/DynamicProfiles/Profiles.json"
 
 if [ ! -f "$DST/DynamicProfiles/Profiles.json" ]; then
   cat <<'JSON' > "$DST/DynamicProfiles/Profiles.json"
