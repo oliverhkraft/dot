@@ -146,6 +146,13 @@ Zsh plugins are managed by Antidote and loaded automatically from:
 To add/remove plugins, edit that file and restart your shell. The bundle is auto-generated at
 `~/.zsh_plugins.zsh` when the list changes.
 
+
+## iTerm2 Nerd Font
+
+iTerm2 gets a dynamic profile with JetBrainsMono Nerd Font and is set as the default profile.
+
+If iTerm2 is already running, restart it after `make apply`.
+
 ## iTerm2 Preferences
 
 This repo manages iTerm2 prefs in `~/.iterm2` and only enables “Load prefs from folder”

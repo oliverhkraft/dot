@@ -40,6 +40,9 @@ main() {
   command -v stow >/dev/null 2>&1 || brew install stow
   stow git ssh zsh vscode iterm2
 
+  log "Setting iTerm2 default profile (Nerd Font)"
+  bash "$ROOT/scripts/iterm2-set-default-profile.sh" || true
+
 
   log "Applying macOS defaults (idempotent)"
   bash "$ROOT/defaults.sh"
