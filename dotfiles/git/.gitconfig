@@ -1,8 +1,8 @@
 [user]
-	name = Your Name
-	email = you@example.com
+	name = Oliver Hertzman Kraft
+	email = Oliver@oliverkraft.io
 [init]
-	defaultBranch = main
+	defaultBranch = master
 [color]
 	ui = auto
 [push]
