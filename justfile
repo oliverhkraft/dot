@@ -34,3 +34,9 @@ display:
 
 fonts:
 	./fonts.sh
+
+streamdeck-sync:
+	./scripts/streamdeck-sync.sh
+
+streamdeck-restore:
+	./scripts/streamdeck-restore.sh

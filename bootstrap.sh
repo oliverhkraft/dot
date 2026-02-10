@@ -43,6 +43,9 @@ main() {
   log "Linking VS Code settings.json"
   bash "$ROOT/scripts/vscode-link-settings.sh"
 
+  log "Restoring Stream Deck config (optional)"
+  bash "$ROOT/scripts/streamdeck-restore.sh" || true
+
 
   log "Applying macOS defaults (idempotent)"
   bash "$ROOT/defaults.sh"

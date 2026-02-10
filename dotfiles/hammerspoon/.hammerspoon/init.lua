@@ -125,7 +125,7 @@ end
 local function almostMaximize()
   local win = focused() if not win then return end
   local f = screenFrame(win)
-  local scale = 0.9
+  local scale = 0.85
   local w = f.w * scale
   local h = f.h * scale
   setFrame(win, {x = f.x + (f.w - w) / 2, y = f.y + (f.h - h) / 2, w = w, h = h})

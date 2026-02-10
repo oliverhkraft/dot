@@ -12,6 +12,8 @@ help:
 	@echo " make dock           Apply Dock layout"
 	@echo " make display        Apply display configuration"
 	@echo " make fonts          Open Font Book (optional)"
+	@echo " make streamdeck-sync    Export Stream Deck config into streamdeck-export/"
+	@echo " make streamdeck-restore Restore tracked Stream Deck config to this Mac"
 	@echo " make sync-defaults  Export current UI defaults and show git diff"
 	@echo " make snapshot NAME=before  Take a defaults snapshot"
 
@@ -59,3 +61,11 @@ display:
 .PHONY: fonts
 fonts:
 	./fonts.sh
+
+.PHONY: streamdeck-sync
+streamdeck-sync:
+	./scripts/streamdeck-sync.sh
+
+.PHONY: streamdeck-restore
+streamdeck-restore:
+	./scripts/streamdeck-restore.sh

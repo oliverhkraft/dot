@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WALLPAPER="$HOME/Pictures/wallpaper.jpg"
+WALLPAPER="$HOME/dotfiles/wallpaper/wallpaper.jpg"
 if [ ! -f "$WALLPAPER" ]; then
   echo "Wallpaper not found at: $WALLPAPER (skipping)"
   exit 0
