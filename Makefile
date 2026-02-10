@@ -8,6 +8,7 @@ help:
 	@echo " make brew           Install/update Brewfile"
 	@echo " make stow           Apply dotfiles via stow"
 	@echo " make defaults       Apply macOS defaults"
+	@echo " make browser        Set default browser"
 	@echo " make dock           Apply Dock layout"
 	@echo " make display        Apply display configuration"
 	@echo " make fonts          Open Font Book (optional)"
@@ -34,6 +35,10 @@ stow:
 .PHONY: defaults
 defaults:
 	./defaults.sh
+
+.PHONY: browser
+browser:
+	./browser.sh
 
 .PHONY: dock
 dock:

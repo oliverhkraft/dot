@@ -3,82 +3,107 @@
 A minimal, repeatable macOS bootstrap repo (Apple Silicon) using:
 - Homebrew + Brewfile for apps/tools
 - GNU Stow for dotfiles
-- `defaults` + `dockutil`, `displayplacer` for macOS UI settings
+- `defaults` + `dockutil` + `displayplacer` for macOS UI settings
 - 1Password SSH agent (no private keys in repo)
 
-This is intentionally simple and idempotent. Re-running the bootstrap applies the repo’s state.
+This repo is intentionally simple and idempotent. Re-running the bootstrap applies the repo’s state.
 
-## What This Repo Does
+**Overview**
 
+This repo:
 - Installs CLI tools and GUI apps (including Laravel Herd + Jump Desktop)
-- Applies dotfiles (zsh, git, ssh, VS Code, Ghostty, Starship)
-- Enforces macOS defaults + Dock layout
-- Fails fast if FileVault is ON (Jump Desktop policy)
+- Applies dotfiles (zsh, git, ssh, VS Code settings, Ghostty, Starship, Hammerspoon)
+- Enforces macOS defaults, Dock layout, and display configuration
+- Sets Chrome as the default browser
+- Fails fast if FileVault is ON (Jump Desktop requirement)
 
-## Requirements
+**Quick Start (New Mac)**
 
-- macOS (Darwin)
-- Apple Silicon recommended (`/opt/homebrew`)
-- Admin access to install software and change system settings
-- 1Password installed (for SSH agent)
-- FileVault must be OFF
+1. Disable FileVault (required for Jump Desktop)
 
-## Quick Start (New Mac)
+System Settings → Privacy & Security → FileVault → Turn Off
 
-1. **Disable FileVault** (required for Jump Desktop)
-   - System Settings → Privacy & Security → FileVault → Turn Off
-   - Or: `sudo fdesetup disable` (interactive)
+Or:
+```bash
+sudo fdesetup disable
+```
 
-2. **Install 1Password** (if not already installed)
-   - You can install it manually, or let Brewfile handle it later
-   - In 1Password: Settings → Developer → Enable “Use SSH Agent”
+2. Install 1Password and enable the SSH agent
 
-3. **Clone this repo**
+In 1Password: Settings → Developer → Enable “Use SSH Agent”
+
+3. Make sure your SSH keys are in 1Password
+
+If you already have keys on another Mac:
+- Open 1Password on the old Mac
+- Create a new “SSH Key” item and paste your existing private key
+- On the new Mac, sign into 1Password and unlock it
+
+If you don’t have keys yet:
+- Generate a key and add it to 1Password
+
+4. Ensure Git is available
+
+On a new macOS install, Git may require Command Line Tools:
+```bash
+xcode-select --install
+```
+
+5. Clone this repo
 
 ```bash
 git clone <YOUR_REPO_URL> mac-bootstrap
 cd mac-bootstrap
 ```
 
-4. **Edit identity placeholders**
+6. Update identity placeholders
 
-Update:
-- `dotfiles/git/.gitconfig`
+Edit `dotfiles/git/.gitconfig` and set your name/email.
 
-5. **Run the doctor check**
+7. Optional: update display configuration
+
+If you want to set a specific screen layout, run:
+```bash
+displayplacer list
+```
+Copy the generated command into `displayplacer.conf` (one line).
+
+8. Run the doctor check
 
 ```bash
 make doctor
 ```
+If FileVault is ON, the doctor will fail and tell you how to turn it off.
 
-If FileVault is ON, the doctor will fail and explain how to turn it off.
-
-6. **Apply everything**
+9. Apply everything
 
 ```bash
 make apply
 ```
 
-## What `make apply` Does (Idempotent)
+**What `make apply` Does**
 
 1. Runs `doctor.sh` (checks prerequisites + FileVault policy)
 2. Installs Homebrew (if missing)
 3. Installs Brewfile packages and casks
 4. Applies dotfiles via Stow
-5. Applies macOS defaults
-6. Sets Dock layout
-7. Sets display configuration (optional)
-8. Sets wallpaper (optional)
+5. Links VS Code `settings.json` only
+6. Applies macOS defaults
+7. Sets Chrome as the default browser
+8. Sets Dock layout
+9. Applies display configuration (if `displayplacer.conf` exists)
+10. Applies wallpaper (if `~/Pictures/wallpaper.jpg` exists)
 
 You can re-run `make apply` at any time. It is safe and will re-apply the repo’s state.
 
-## Commands
+**Commands**
 
 - `make apply` – Full bootstrap
 - `make doctor` – Prereq + policy checks
 - `make brew` – Install/update Brewfile only
 - `make stow` – Apply dotfiles only (and link VS Code settings.json)
 - `make defaults` – Apply macOS defaults only
+- `make browser` – Set default browser (Chrome)
 - `make dock` – Apply Dock layout only
 - `make display` – Apply display configuration
 - `make fonts` – Open Font Book (optional)
@@ -87,15 +112,15 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 
 (Equivalent `just` commands are available if you prefer `just`.)
 
-## Apps Installed
+**Apps Installed**
 
 From `Brewfile`:
-- CLI: `git`, `stow`, `dockutil`, `displayplacer`, `jq`, `ripgrep`, `fd`, `mas`, `just`
-- Casks: `1password`, `visual-studio-code`, `raycast`, `ghostty`, `hammerspoon`, `herd`, `jump-desktop`
+- CLI: `git`, `stow`, `dockutil`, `displayplacer`, `jq`, `ripgrep`, `fd`, `mas`, `just`, `antidote`, `starship`, `lazygit`, `duti`
+- Casks: `1password`, `visual-studio-code`, `ghostty`, `hammerspoon`, `raycast`, `herd`, `jump-desktop`, `font-jetbrains-mono-nerd-font`, `google-chrome`, `slack`, `todoist-app`, `codex-app`
 
 Edit `Brewfile` to add/remove apps. Re-run `make brew` or `make apply`.
 
-## Dotfiles Layout (Stow)
+**Dotfiles Layout (Stow)**
 
 ```
 dotfiles/
@@ -104,6 +129,7 @@ dotfiles/
 ├── ssh/.ssh/known_hosts
 ├── zsh/.zprofile
 ├── zsh/.zshrc
+├── zsh/.zsh_plugins.txt
 ├── vscode/Library/Application Support/Code/User/settings.json
 ├── ghostty/.config/ghostty/config
 ├── hammerspoon/.hammerspoon/init.lua
@@ -111,47 +137,39 @@ dotfiles/
 ```
 
 Stow command used:
-
 ```bash
 stow git ssh zsh ghostty starship hammerspoon
 ```
 
 VS Code is handled separately so only `settings.json` is linked (no extra VS Code files in the repo).
 
-## Nerd Font (Icons)
+**Nerd Font (Icons)**
 
 This repo installs JetBrainsMono Nerd Font via Homebrew cask so icons render correctly in Starship.
 
-Ghostty uses this font automatically via its config. If you use a different terminal,
+Ghostty is configured to use this font automatically. If you use a different terminal,
 set its font to **JetBrainsMono Nerd Font** manually.
 
 Optional: run `make fonts` to open Font Book and verify the font is installed.
 
-## Prompt (Starship)
+**Prompt (Starship)**
 
-This repo uses Starship for the shell prompt. Config lives at:
+Config lives at:
+- `dotfiles/starship/.config/starship.toml`
 
-- `~/.config/starship.toml` (symlinked from `dotfiles/starship/.config/starship.toml`)
+**Zsh Plugins (Antidote)**
 
-To tweak the prompt, edit that file and open a new shell.
+Plugins are loaded from:
+- `dotfiles/zsh/.zsh_plugins.txt`
 
-## Zsh Plugins (Antidote)
+To add/remove plugins, edit the file and restart your shell.
 
-Zsh plugins are managed by Antidote and loaded automatically from:
+**Window Manager (Hammerspoon)**
 
-- `~/.zsh_plugins.txt` (symlinked from `dotfiles/zsh/.zsh_plugins.txt`)
+Config lives at:
+- `dotfiles/hammerspoon/.hammerspoon/init.lua`
 
-To add/remove plugins, edit that file and restart your shell. The bundle is auto-generated at
-`~/.zsh_plugins.zsh` when the list changes.
-
-
-## Window Manager (Hammerspoon)
-
-Hammerspoon config lives at `~/.hammerspoon/init.lua` (symlinked from
-`dotfiles/hammerspoon/.hammerspoon/init.lua`).
-
-Hotkeys match the screenshot (Rectangle-style):
-
+Hotkeys (Rectangle-style):
 - `ctrl+alt+Left/Right/Up/Down` → halves
 - `ctrl+alt+C` → center half
 - `ctrl+alt+U/I/J/K` → corners
@@ -163,92 +181,85 @@ Hotkeys match the screenshot (Rectangle-style):
 
 You must grant Accessibility permissions to Hammerspoon the first time it runs.
 
-## Terminal (Ghostty)
+**Terminal (Ghostty)**
 
-Ghostty config lives at `~/.config/ghostty/config` (symlinked from
-`dotfiles/ghostty/.config/ghostty/config`).
+Config lives at:
+- `dotfiles/ghostty/.config/ghostty/config`
 
-It is set to use **JetBrainsMono Nerd Font** by default. Restart Ghostty after `make apply`.
+Restart Ghostty after `make apply`.
 
-## SSH Keys (1Password)
+**Default Browser (Chrome)**
+
+Default browser is set via `duti` in `browser.sh`.
+
+If it doesn’t take effect immediately:
+- Run `make browser` again after Chrome is installed
+- Log out and back in
+
+**SSH Keys (1Password)**
 
 No private keys are stored in this repo.
 
 SSH is configured to use the 1Password SSH agent socket:
-
 ```
 ~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock
 ```
 
-Make sure 1Password → Settings → Developer → “Use SSH Agent” is enabled.
+If Git over SSH prompts for a password on a new Mac:
+- Make sure the key is saved in 1Password
+- Make sure 1Password is unlocked
+- Run `ssh-add -L` to confirm keys are visible
+- Add the public key to GitHub/GitLab if needed
 
-## macOS Defaults & UI Changes
+**macOS Defaults & UI Changes**
 
 Defaults are enforced from `defaults.sh`. If you change settings in the UI, they will revert
 on the next `make apply` unless you update `defaults.sh`.
 
 To capture current UI settings:
-
 ```bash
 make sync-defaults
 ```
 
 This writes plist exports into `defaults-export/` for review.
 
-## Dock Layout
+**Dock Layout**
 
 Dock is reset every run via `dock.sh`. If you want a custom order, edit `dock.sh`.
 
-## Display Resolution
+**Display Configuration**
 
-This repo supports enforcing display resolution via `displayplacer`.
-
-Steps:
-1. Run `displayplacer list`
-2. Paste a line into `displayplacer.conf`
-3. Re-run `make apply` or `make display`
-
-Example `displayplacer.conf` line:
-
+Display config is applied from `displayplacer.conf`. If display IDs change, run:
+```bash
+displayplacer list
 ```
-id:YOUR_DISPLAY_ID res:2560x1440 hz:60 scaling:on origin:(0,0) degree:0
-```
+Then update `displayplacer.conf` with the new line.
 
-If `displayplacer.conf` is missing or empty, display configuration is skipped.
+**Wallpaper**
 
-## Wallpaper
+If `~/Pictures/wallpaper.jpg` exists, it is applied. Otherwise the step is skipped.
 
-By default, `wallpaper.sh` tries to set:
+**Troubleshooting**
 
-```
-~/Pictures/wallpaper.jpg
-```
+- `brew bundle` fails because of missing/renamed casks
+  - Run `brew search <name>` and update `Brewfile`
 
-If you don’t want enforced wallpaper, comment out the wallpaper step in `bootstrap.sh`.
+- Stow errors about missing package
+  - Ensure the package exists under `dotfiles/` and matches the name in `stow` commands
 
-## FileVault Policy (Required)
+- Starship icons render as `?`
+  - Verify JetBrainsMono Nerd Font is installed
+  - Ensure your terminal is using **JetBrainsMono Nerd Font**
+  - Restart the terminal app
 
-Jump Desktop requires FileVault to be OFF in this setup.
-`doctor.sh` will fail if FileVault is ON.
+- Hammerspoon doesn’t move windows
+  - Grant Accessibility permissions in System Settings → Privacy & Security → Accessibility
 
-Disable it:
-- System Settings → Privacy & Security → FileVault → Turn Off
-- Or: `sudo fdesetup disable`
+- Default browser doesn’t change
+  - Run `make browser` again after Chrome is installed
+  - Log out and back in
 
-## Troubleshooting
+**Notes**
 
-- **Homebrew install fails**: Run `xcode-select --install` then re-run `make apply`.
-- **1Password agent not detected**: Enable it in 1Password Developer settings, then re-run `make doctor`.
-- **Dock not updating**: `dockutil` must be installed (in Brewfile). Re-run `make dock`.
-- **Display not updating**: `displayplacer` must be installed (in Brewfile). Re-run `make display`.
-- **Ghostty config not loading**: Re-run `make stow` and restart Ghostty.
-
-## Suggested Workflow for Updates
-
-- Change dotfiles → commit → run `make apply`
-- Change macOS UI settings → `make sync-defaults` → update `defaults.sh`
-- Add apps → edit `Brewfile` → `make brew`
-
-## License
-
-MIT (or choose your own)
+`make apply` is the superset. You do not need to run `make brew`, `make stow`, or `make dock`
+manually unless you want to apply only one part.

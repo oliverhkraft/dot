@@ -47,6 +47,9 @@ main() {
   log "Applying macOS defaults (idempotent)"
   bash "$ROOT/defaults.sh"
 
+  log "Setting default browser (optional)"
+  bash "$ROOT/browser.sh" || true
+
   log "Applying Dock layout (idempotent)"
   bash "$ROOT/dock.sh"
 

@@ -17,6 +17,9 @@ stow:
 defaults:
 	./defaults.sh
 
+browser:
+	./browser.sh
+
 dock:
 	./dock.sh
 
