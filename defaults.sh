@@ -26,6 +26,7 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 # ---------- Trackpad ----------
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write -g com.apple.trackpad.scaling -float 1.0
 
 # Apply immediately (ignore errors if processes not running)
 killall Dock >/dev/null 2>&1 || true
