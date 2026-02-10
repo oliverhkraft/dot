@@ -3,3 +3,5 @@
 defaults-export/
 .defaults-snapshots/
 Brewfile.lock.json
+dotfiles/vscode/Library/Application Support/Code/User/*
+!dotfiles/vscode/Library/Application Support/Code/User/settings.json

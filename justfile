@@ -11,7 +11,8 @@ brew:
 	brew bundle --file Brewfile
 
 stow:
-	stow git ssh zsh vscode ghostty starship
+	stow git ssh zsh ghostty starship
+	./scripts/vscode-link-settings.sh
 
 defaults:
 	./defaults.sh
