@@ -77,7 +77,7 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 - `make apply` – Full bootstrap
 - `make doctor` – Prereq + policy checks
 - `make brew` – Install/update Brewfile only
-- `make stow` – Apply dotfiles only
+- `make stow` – Apply dotfiles only (and link VS Code settings.json)
 - `make defaults` – Apply macOS defaults only
 - `make dock` – Apply Dock layout only
 - `make display` – Apply display configuration
@@ -112,8 +112,10 @@ dotfiles/
 Stow command used:
 
 ```bash
-stow git ssh zsh vscode ghostty starship
+stow git ssh zsh ghostty starship
 ```
+
+VS Code is handled separately so only `settings.json` is linked (no extra VS Code files in the repo).
 
 ## Nerd Font (Icons)
 
