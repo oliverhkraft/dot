@@ -9,7 +9,7 @@ fi
 dockutil --remove all --no-restart || true
 
 dockutil --add "/Applications/Safari.app" --no-restart || true
-dockutil --add "/Applications/iTerm.app" --no-restart || true
+dockutil --add "/Applications/Ghostty.app" --no-restart || true
 dockutil --add "/Applications/Visual Studio Code.app" --no-restart || true
 dockutil --add "/Applications/1Password.app" --no-restart || true
 dockutil --add "/Applications/Herd.app" --no-restart || true

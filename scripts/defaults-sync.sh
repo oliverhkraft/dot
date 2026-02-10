@@ -13,7 +13,6 @@ DOMAINS=(
   "com.apple.trackpad"
   "com.apple.AppleMultitouchTrackpad"
   "com.apple.menuextra.clock"
-  "com.googlecode.iterm2"
 )
 
 echo "Exporting current macOS defaults to: $OUT"

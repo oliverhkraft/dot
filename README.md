@@ -11,9 +11,8 @@ This is intentionally simple and idempotent. Re-running the bootstrap applies th
 ## What This Repo Does
 
 - Installs CLI tools and GUI apps (including Laravel Herd + Jump Desktop)
-- Applies dotfiles (zsh, git, ssh, VS Code, iTerm2)
+- Applies dotfiles (zsh, git, ssh, VS Code, Ghostty, Starship)
 - Enforces macOS defaults + Dock layout
-- Loads iTerm2 preferences from a folder
 - Fails fast if FileVault is ON (Jump Desktop policy)
 
 ## Requirements
@@ -67,11 +66,9 @@ make apply
 3. Installs Brewfile packages and casks
 4. Applies dotfiles via Stow
 5. Applies macOS defaults
-6. Disables iTerm2 custom prefs loading (prevents warnings)
-7. Sets iTerm2 font (Nerd Font)
-8. Sets Dock layout
-9. Sets display configuration (optional)
-10. Sets wallpaper (optional)
+6. Sets Dock layout
+7. Sets display configuration (optional)
+8. Sets wallpaper (optional)
 
 You can re-run `make apply` at any time. It is safe and will re-apply the repo’s state.
 
@@ -94,7 +91,7 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 
 From `Brewfile`:
 - CLI: `git`, `stow`, `dockutil`, `displayplacer`, `jq`, `ripgrep`, `fd`, `mas`, `just`
-- Casks: `1password`, `visual-studio-code`, `raycast`, `iterm2`, `herd`, `jump-desktop`
+- Casks: `1password`, `visual-studio-code`, `raycast`, `ghostty`, `herd`, `jump-desktop`
 
 Edit `Brewfile` to add/remove apps. Re-run `make brew` or `make apply`.
 
@@ -108,24 +105,22 @@ dotfiles/
 ├── zsh/.zprofile
 ├── zsh/.zshrc
 ├── vscode/Library/Application Support/Code/User/settings.json
-├── iterm2/Library/Application Support/iTerm2/DynamicProfiles/Profiles.json
+├── ghostty/.config/ghostty/config
 └── starship/.config/starship.toml
 ```
 
 Stow command used:
 
 ```bash
-stow git ssh zsh vscode iterm2 starship
+stow git ssh zsh vscode ghostty starship
 ```
-
-
-
 
 ## Nerd Font (Icons)
 
 This repo installs JetBrainsMono Nerd Font via Homebrew cask so icons render correctly in Starship.
 
-After `make apply`, set your terminal font to **JetBrainsMono Nerd Font**.
+Ghostty uses this font automatically via its config. If you use a different terminal,
+set its font to **JetBrainsMono Nerd Font** manually.
 
 Optional: run `make fonts` to open Font Book and verify the font is installed.
 
@@ -146,29 +141,12 @@ Zsh plugins are managed by Antidote and loaded automatically from:
 To add/remove plugins, edit that file and restart your shell. The bundle is auto-generated at
 `~/.zsh_plugins.zsh` when the list changes.
 
+## Terminal (Ghostty)
 
-## iTerm2 Nerd Font
+Ghostty config lives at `~/.config/ghostty/config` (symlinked from
+`dotfiles/ghostty/.config/ghostty/config`).
 
-iTerm2 is configured to use a Nerd Font for all profiles via
-`scripts/iterm2-apply-font.sh`. It auto-detects installed Nerd Fonts and applies the
-first match (JetBrainsMono Nerd Font preferred).
-
-If iTerm2 is already running, it will be restarted (unless `ITERM2_RESTART=0`).
-
-Override the font or size:
-
-```bash
-ITERM_FONT_NAME="JetBrainsMono Nerd Font" ITERM_FONT_SIZE=14 make apply
-```
-
-## iTerm2 Preferences
-
-iTerm2 custom prefs loading is disabled by default to avoid “missing or malformed file”
-warnings. The font is applied directly to iTerm2’s standard preferences, so it works
-out of the box.
-
-Note: if iTerm2 is running, `make apply` will restart it to load prefs.
-Set `ITERM2_RESTART=0` to skip the restart.
+It is set to use **JetBrainsMono Nerd Font** by default. Restart Ghostty after `make apply`.
 
 ## SSH Keys (1Password)
 
@@ -241,7 +219,7 @@ Disable it:
 - **1Password agent not detected**: Enable it in 1Password Developer settings, then re-run `make doctor`.
 - **Dock not updating**: `dockutil` must be installed (in Brewfile). Re-run `make dock`.
 - **Display not updating**: `displayplacer` must be installed (in Brewfile). Re-run `make display`.
-- **iTerm2 warning about prefs**: Custom prefs are disabled by default; re-run `make apply`.
+- **Ghostty config not loading**: Re-run `make stow` and restart Ghostty.
 
 ## Suggested Workflow for Updates
 

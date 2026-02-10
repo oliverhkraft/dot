@@ -28,7 +28,7 @@ brew:
 
 .PHONY: stow
 stow:
-	stow git ssh zsh vscode iterm2 starship
+	stow git ssh zsh vscode ghostty starship
 
 .PHONY: defaults
 defaults:
