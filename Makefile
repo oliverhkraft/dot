@@ -28,7 +28,7 @@ brew:
 
 .PHONY: stow
 stow:
-	stow git ssh zsh ghostty starship
+	stow git ssh zsh ghostty starship hammerspoon
 	./scripts/vscode-link-settings.sh
 
 .PHONY: defaults

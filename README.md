@@ -91,7 +91,7 @@ You can re-run `make apply` at any time. It is safe and will re-apply the repo�
 
 From `Brewfile`:
 - CLI: `git`, `stow`, `dockutil`, `displayplacer`, `jq`, `ripgrep`, `fd`, `mas`, `just`
-- Casks: `1password`, `visual-studio-code`, `raycast`, `ghostty`, `herd`, `jump-desktop`
+- Casks: `1password`, `visual-studio-code`, `raycast`, `ghostty`, `hammerspoon`, `herd`, `jump-desktop`
 
 Edit `Brewfile` to add/remove apps. Re-run `make brew` or `make apply`.
 
@@ -106,13 +106,14 @@ dotfiles/
 ├── zsh/.zshrc
 ├── vscode/Library/Application Support/Code/User/settings.json
 ├── ghostty/.config/ghostty/config
+├── hammerspoon/.hammerspoon/init.lua
 └── starship/.config/starship.toml
 ```
 
 Stow command used:
 
 ```bash
-stow git ssh zsh ghostty starship
+stow git ssh zsh ghostty starship hammerspoon
 ```
 
 VS Code is handled separately so only `settings.json` is linked (no extra VS Code files in the repo).
@@ -142,6 +143,25 @@ Zsh plugins are managed by Antidote and loaded automatically from:
 
 To add/remove plugins, edit that file and restart your shell. The bundle is auto-generated at
 `~/.zsh_plugins.zsh` when the list changes.
+
+
+## Window Manager (Hammerspoon)
+
+Hammerspoon config lives at `~/.hammerspoon/init.lua` (symlinked from
+`dotfiles/hammerspoon/.hammerspoon/init.lua`).
+
+Hotkeys match the screenshot (Rectangle-style):
+
+- `ctrl+alt+Left/Right/Up/Down` → halves
+- `ctrl+alt+C` → center half
+- `ctrl+alt+U/I/J/K` → corners
+- `ctrl+alt+D/F/G` → thirds
+- `ctrl+alt+E/T/Y` → two-thirds
+- `ctrl+alt+Return` → maximize
+- `ctrl+alt+'` → almost maximize (90%)
+- `ctrl+alt+shift+Up` → maximize height
+
+You must grant Accessibility permissions to Hammerspoon the first time it runs.
 
 ## Terminal (Ghostty)
 

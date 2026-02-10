@@ -38,7 +38,7 @@ main() {
 
   log "Applying dotfiles via stow (idempotent)"
   command -v stow >/dev/null 2>&1 || brew install stow
-  stow git ssh zsh ghostty starship
+  stow git ssh zsh ghostty starship hammerspoon
 
   log "Linking VS Code settings.json"
   bash "$ROOT/scripts/vscode-link-settings.sh"
