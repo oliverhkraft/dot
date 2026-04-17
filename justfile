@@ -14,8 +14,14 @@ stow:
 	stow git ssh zsh ghostty starship hammerspoon
 	./scripts/vscode-link-settings.sh
 
+mas-apps:
+	./scripts/mas-install.sh
+
 defaults:
 	./defaults.sh
+
+headless:
+	./headless.sh
 
 browser:
 	./browser.sh
@@ -40,3 +46,6 @@ streamdeck-sync:
 
 streamdeck-restore:
 	./scripts/streamdeck-restore.sh
+
+tunnel:
+	./scripts/cloudflared-setup.sh

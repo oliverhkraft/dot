@@ -7,7 +7,10 @@ help:
 	@echo " make doctor         Check prerequisites + FileVault policy"
 	@echo " make brew           Install/update Brewfile"
 	@echo " make stow           Apply dotfiles via stow"
+	@echo " make mas-apps       Install App Store apps (Amphetamine)"
 	@echo " make defaults       Apply macOS defaults"
+	@echo " make headless       Apply headless remote settings"
+	@echo " make tunnel         Run guided Cloudflare tunnel setup (one-time)"
 	@echo " make browser        Set default browser"
 	@echo " make dock           Apply Dock layout"
 	@echo " make display        Apply display configuration"
@@ -34,9 +37,17 @@ stow:
 	stow git ssh zsh ghostty starship hammerspoon
 	./scripts/vscode-link-settings.sh
 
+.PHONY: mas-apps
+mas-apps:
+	./scripts/mas-install.sh
+
 .PHONY: defaults
 defaults:
 	./defaults.sh
+
+.PHONY: headless
+headless:
+	./headless.sh
 
 .PHONY: browser
 browser:
@@ -69,3 +80,7 @@ streamdeck-sync:
 .PHONY: streamdeck-restore
 streamdeck-restore:
 	./scripts/streamdeck-restore.sh
+
+.PHONY: tunnel
+tunnel:
+	./scripts/cloudflared-setup.sh
