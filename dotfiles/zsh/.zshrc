@@ -1,5 +1,5 @@
 # Auto-attach tmux on SSH sessions for resilience
-if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]] && command -v tmux &>/dev/null; then
+if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]] && [[ -o interactive ]] && command -v tmux &>/dev/null; then
   exec tmux new-session -A -s main
 fi
 

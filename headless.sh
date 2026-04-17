@@ -137,7 +137,7 @@ PermitRootLogin no"
   local check_script
   check_script="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts/cloudflared-check.sh"
   if [[ -x "$check_script" ]]; then
-    bash "$check_script"
+    bash "$check_script" || true
   else
     warn "cloudflared-check.sh not found; skipping tunnel status check."
   fi
