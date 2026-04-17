@@ -1,3 +1,8 @@
+# Auto-attach tmux on SSH sessions for resilience
+if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]] && command -v tmux &>/dev/null; then
+  exec tmux new-session -A -s main
+fi
+
 export EDITOR="code --wait"
 # Antidote (Zsh plugin manager)
 if [ -r /opt/homebrew/opt/antidote/share/antidote/antidote.zsh ]; then
@@ -48,3 +53,9 @@ export PATH="/Users/ohk-mini/Library/Application Support/Herd/bin/":$PATH
 
 # Herd injected PHP 8.3 configuration.
 export HERD_PHP_83_INI_SCAN_DIR="/Users/ohk-mini/Library/Application Support/Herd/config/php/83/"
+
+# OneCLI
+export PATH="/Users/ohk-mini/.local/bin:$PATH"
+
+# direnv
+eval "$(direnv hook zsh)"
