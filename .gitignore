@@ -7,3 +7,9 @@ dotfiles/vscode/Library/Application\ Support/Code/*
 !dotfiles/vscode/Library/Application\ Support/Code/User/
 dotfiles/vscode/Library/Application\ Support/Code/User/*
 !dotfiles/vscode/Library/Application\ Support/Code/User/settings.json
+
+streamdeck-export/Library/Application Support/com.elgato.StreamDeck/*
+
+dotfiles/ssh/.ssh/id_*
+dotfiles/ssh/.ssh/authorized_keys
+dotfiles/ssh/.ssh/known_hosts.old
