@@ -36,6 +36,9 @@ main() {
   log "Installing Brewfile packages (idempotent)"
   brew bundle --file "$ROOT/Brewfile"
 
+  log "Installing App Store apps (optional)"
+  bash "$ROOT/scripts/mas-install.sh" || true
+
   log "Applying dotfiles via stow (idempotent)"
   command -v stow >/dev/null 2>&1 || brew install stow
   stow git ssh zsh ghostty starship hammerspoon
@@ -49,6 +52,9 @@ main() {
 
   log "Applying macOS defaults (idempotent)"
   bash "$ROOT/defaults.sh"
+
+  log "Applying headless remote settings (idempotent)"
+  bash "$ROOT/headless.sh"
 
   log "Setting default browser (optional)"
   bash "$ROOT/browser.sh" || true
